@@ -1,0 +1,35 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Represents an individual infinite workspace board instance
+model Board {
+  id        String    @id @default(uuid())
+  name      String    @default("Untitled Board")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  elements  Element[] // One-to-Many structural relationship mapping
+}
+
+// Represents a geometric vector entity saved to the canvas matrix plane
+model Element {
+  id          String   @id // Retain client-generated crypto.randomUUID()
+  boardId     String
+  type        String   // "rectangle" | "circle" | "arrow"
+  x           Float
+  y           Float
+  width       Float
+  height      Float
+  strokeColor String
+  strokeWidth Float
+  fillColor   String?  // Optional field handles
+
+  // Establish active foreign key mapping parameters
+  board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+
+  @@index([boardId]) // Index for fast queries when opening boards
+}
