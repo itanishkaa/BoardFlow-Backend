@@ -4,7 +4,8 @@ import { PrismaLibSql } from '@prisma/adapter-libsql';
 
 @Injectable()
 export class PrismaService implements OnModuleInit {
-  public client: PrismaClient;
+  // Explicitly typing this ensures autocomplete maps cleanly to your models
+  public readonly client: PrismaClient;
 
   constructor() {
     const adapter = new PrismaLibSql({

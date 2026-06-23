@@ -27,6 +27,8 @@ model Element {
   strokeColor String
   strokeWidth Float
   fillColor   String?  // Optional field handles
+  text        String?
+  points      String?
 
   // Establish active foreign key mapping parameters
   board       Board    @relation(fields: [boardId], references: [id], onDelete: Cascade)
