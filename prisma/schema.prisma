@@ -19,7 +19,7 @@ model Board {
 model Element {
   id          String   @id // Retain client-generated crypto.randomUUID()
   boardId     String
-  type        String   // "rectangle" | "circle" | "arrow"
+  type        String   // "rectangle" | "circle" | "arrow" | "text" | "freehand"
   x           Float
   y           Float
   width       Float

@@ -35,7 +35,6 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
   async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
     
-    // 🛠️ FIXED: Clean up room resources cleanly on abrupt tab closures without global leaks
     const rooms = Array.from(client.rooms);
     rooms.forEach((roomId) => {
       if (roomId !== client.id) {
@@ -68,7 +67,6 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
         },
       });
 
-      // 🛠️ FIXED: Safely unpack database JSON blobs back to Point[] arrays for your frontend client
       const parsedElements = board.elements.map((el: typeof board.elements[number] & PersistedElement) => ({
         ...el,
         points: el.points ? JSON.parse(el.points) : undefined,
@@ -102,7 +100,6 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
           strokeWidth: element.strokeWidth,
           fillColor: element.fillColor || null,
           text: element.text || null,
-          // 🛠️ FIXED: Stringify freehand point vectors so SQLite can save them safely
           points: element.points ? JSON.stringify(element.points) : null,
         },
       });
@@ -128,7 +125,6 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
     });
   }
 
-  // 🔥 ADDED: COLLABORATIVE REAL-TIME TEXT COMPILATION OVERLAY PIPELINE ROUTER
   @SubscribeMessage('TYPING_STATUS')
   handleTypingStatus(
     @ConnectedSocket() client: Socket,
@@ -196,7 +192,6 @@ export class BoardGateway implements OnGatewayConnection, OnGatewayDisconnect {
           width: element.width,
           height: element.height,
           text: element.text !== undefined ? element.text : undefined,
-          // 🛠️ FIXED: Keep shifted freehand shapes structurally persistent during selection drags
           points: element.points ? JSON.stringify(element.points) : undefined,
         },
       });
